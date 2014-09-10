@@ -8,7 +8,7 @@ resize2fs /dev/mapper/vg_vagrant-lv_root
 
 # Install Packages
 yum remove -y vim-minimal # Removed sudo :(
-yum install -y sudo vim-enhanced docker tmux cmake java-1.8.0-openjdk mongodb git
+yum install -y sudo vim-enhanced docker-io tmux cmake java-1.8.0-openjdk mongodb git
 
 # Leiningen
 curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/bin/lein
