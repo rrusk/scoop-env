@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Partitioning
 parted /dev/sdb mklabel msdos
 parted /dev/sdb mkpart primary xfs 512 100%
@@ -13,8 +15,9 @@ yum install -y sudo vim-enhanced docker-io tmux cmake java-1.8.0-openjdk mongodb
 # Leiningen
 curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/bin/lein
 
-# Get the repos.
-git clone https://github.com/Hoverbear/scoop-env scoop-env
-git clone https://github.com/Hoverbear/scoop-provider-clj.git scoop-env/provider
-git clone https://github.com/Hoverbear/scoop-visualizer-clj.git scoop-env/visualizer
-
+su vagrant << EOF
+  # Get the repos.
+  git clone https://github.com/Hoverbear/scoop-env scoop-env
+  git clone https://github.com/Hoverbear/scoop-provider-clj.git scoop-env/provider
+  git clone https://github.com/Hoverbear/scoop-visualizer-clj.git scoop-env/visualizer
+EOF
