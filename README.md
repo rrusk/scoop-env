@@ -49,3 +49,78 @@ make pull
 
 Due to some *unreliabilities* with Docker and Virtualbox interactions (We haven't quite figured it out yet), `docker pull` commands will often fail with cryptic errors. 
 
+#### Unexpected EOF
+
+Output:
+
+```
+b5094295c793: Pulling metadata
+2014/09/17 18:55:41 unexpected EOF
+make: *** [pull-mongo] Error 1
+```
+
+`make pull` is a composite of the following tasks, try the one that failed:
+
+```bash
+make pull-mongo
+make pull-wildfly
+make pull-keycloak
+make pull-phusion
+```
+
+Eventually, you'll successfully get a copy.
+
+#### Failed to create rootfs
+
+```bash
+eea2821a4553: Download complete
+05aea00a321b: Error downloading dependent layers
+13e42d0c2a51: Download complete
+01e217439a55: Download complete
+2014/09/18 16:29:34 Error pulling image (0.9.6) from phusion/passenger-ruby19, Driver devicemapper failed to create image rootfs 05aea00a321b91d34b2c81a2c4b524fd2ed9912ba061ec9416fb919970edf56b: device 05aea00a321b91d34b2c81a2c4b524fd2ed9912ba061ec9416fb919970edf56b already exists
+make: *** [pull-phusion] Error 1
+```
+
+This commonly happens after the EOF error. In this case, the solution is:
+
+```bash
+sudo rm -rf /var/lib/docker/devicemapper/mnt/05aea00a321b91d34b2c81a2c4b524fd2ed9912ba061ec9416fb919970edf56b
+```
+
+If you have errors removing this folder, particularly an input/output error, try restarting the virtual machine.
+
+## Building the Images
+
+To build the required images for each component of the system you can just run:
+
+```bash
+make build
+```
+
+You may be interested in looking at the `Makefile` at the `build-*` tasks, especially if you are hacking on a particular component.
+
+## Running the Images
+
+```bash
+make run
+```
+
+> If this is your first time running, check out the `hosts` job in the `Makefile`, you may want to run `make hosts`
+
+## Populating the databases
+
+Since there is not a publicly available test database for the Hub component, please place your own as `data/hub-dump`. Then,
+
+```bash
+make database-populate
+```
+
+## Playing
+
+Visit one of the components in your web browser:
+
+* Auth: [auth.scoop.local:8080]()
+* Provider: [provider.scoop.local:8081/api]()
+* Visualizer: [visualizer.scoop.local:8082]()
+* Hub: [hub.scoop.local:8083]()
+* Endpoint: [endpoint.scoop.local:8084]()

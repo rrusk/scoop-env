@@ -54,23 +54,32 @@ run-endpoint:
 # Remove Jobs #
 ###############
 remove-endpoint:
-	docker rm -f endpoint-db || true
-	docker rm -f endpoint || true
+	docker stop endpoint-db || true
+	docker rm endpoint-db || true
+	docker stop endpoint || true
+	docker rm endpoint || true
 
 remove-hub:
-	docker rm -f hub-db || true
-	docker rm -f hub || true
+	docker stop hub-db || true
+	docker rm hub-db || true
+	docker stop hub || true
+	docker rm hub || true
 
 remove-visualizer:
-	docker rm -f visualizer-db || true
-	docker rm -f visualizer || true
+	docker stop visualizer-db || true
+	docker rm visualizer-db || true
+	docker stop visualizer || true
+	docker rm visualizer || true
 
 remove-provider:
-	docker rm -f provider-db || true
-	docker rm -f provider || true
+	docker stop provider-db || true
+	docker rm provider-db || true
+	docker stop provider || true
+	docker rm provider || true
 
 remove-auth:
-	docker rm -f auth || true
+	docker stop auth || true
+	docker rm auth || true
 
 ##############
 # Build Jobs #

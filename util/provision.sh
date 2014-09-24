@@ -14,6 +14,7 @@ yum install -y sudo zsh vim-enhanced docker-io tmux cmake java-1.8.0-openjdk mon
 
 # Leiningen
 curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/bin/lein
+chmod +x /usr/bin/lein
 
 # Daemons
 systemctl enable docker
