@@ -119,8 +119,8 @@ make database-populate
 
 Visit one of the components in your web browser:
 
-* Auth: [auth.scoop.local:8080]()
-* Provider: [provider.scoop.local:8081/api]()
-* Visualizer: [visualizer.scoop.local:8082]()
-* Hub: [hub.scoop.local:8083]()
-* Endpoint: [endpoint.scoop.local:8084]()
+* Auth: [https://auth.scoop.local:8080]()
+* Provider: [https://provider.scoop.local:8081/api]()
+* Visualizer: [https://visualizer.scoop.local:8082]()
+* Hub: [https://hub.scoop.local:8083]()
+* Endpoint: [https://endpoint.scoop.local:8084]()
