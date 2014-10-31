@@ -97,7 +97,7 @@ To build the required images for each component of the system you can just run:
 make build
 ```
 
-You may be interested in looking at the `Makefile` at the `build-*` tasks, especially if you are hacking on a particular component.
+You may be interested in looking at the `Makefile` at the `build-*` tasks, especially if you are hacking on a particular component.  Note that the network connectivity is established through the use of port forwarding from the host to the vagrant box.
 
 ## Running the Images
 
