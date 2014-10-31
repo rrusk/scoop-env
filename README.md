@@ -114,7 +114,10 @@ Since there is not a publicly available test database for the Hub component, ple
 ```bash
 make database-populate
 ```
-This is necessary if you have no end points to pull from.  Alternatively, you can proceed with user creation (step 8 in the query-composer instructions), and arrange a data pull from an endpoint of your choice.
+
+```
+This is necessary if you have no end points to pull from.  Alternatively, you can proceed with user creation (step 8 in the query-composer instructions), and arrange a data pull from an endpoint of your choice.  When running the command to enable the new user, you must run the command from inside the hub docker container and within the /home/app/query-composer/ directory there.
+```
 
 ## Playing
 
