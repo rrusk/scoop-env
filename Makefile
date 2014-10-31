@@ -88,7 +88,7 @@ build-provider:
 	cd provider && lein immutant war && docker build -t scoop/provider .
 
 build-visualizer:
-	cd visualizer && lein immutant war && docker build -t scoop/visualizer .
+	cd visualizer && docker build -t scoop/visualizer .
 
 build-auth:
 	# TODO: Security prepwork.
