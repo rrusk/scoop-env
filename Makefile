@@ -85,7 +85,7 @@ remove-auth:
 # Build Jobs #
 ##############
 build-provider:
-	cd provider && lein immutant war && docker build -t scoop/provider .
+	cd provider && docker build -t scoop/provider .
 
 build-visualizer:
 	cd visualizer && docker build -t scoop/visualizer .
