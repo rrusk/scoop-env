@@ -31,9 +31,12 @@ EOF
 # Get the Repos
 su vagrant << EOF
   git clone https://github.com/Hoverbear/scoop-env scoop-env
-  git clone https://github.com/Hoverbear/scoop-provider-clj.git scoop-env/provider
-  git clone https://github.com/Hoverbear/scoop-visualizer-clj.git scoop-env/visualizer
+  git clone https://github.com/PhysiciansDataCollaborative/visualizer visualizer
+  git clone https://github.com/PhysiciansDataCollaborative/hub-api hub-api
 EOF
+#these are the deprecated closer provider and visualizer
+#git clone https://github.com/Hoverbear/scoop-provider-clj.git scoop-env/provider
+#git clone https://github.com/Hoverbear/scoop-visualizer-clj.git scoop-env/visualizer
 
 echo ''
 echo '`cd dotfiles && make` if you would like nicer configs.'
