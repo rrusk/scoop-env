@@ -20,11 +20,11 @@ database-populate:
 
 hosts:
 	# You *must* sudo this.
-	echo "auth.scoop.local       127.0.0.1" >> /etc/hosts
-	echo "provider.scoop.local   127.0.0.1" >> /etc/hosts
-	echo "visualizer.scoop.local 127.0.0.1" >> /etc/hosts
-	echo "hub.scoop.local        127.0.0.1" >> /etc/hosts
-	echo "endpoint.scoop.local   127.0.0.1" >> /etc/hosts
+	echo "127.0.0.1		auth.scoop.local" >> /etc/hosts
+	echo "127.0.0.1		provider.scoop.local" >> /etc/hosts
+	echo "127.0.0.1		visualizer.scoop.local " >> /etc/hosts
+	echo "127.0.0.1		hub.scoop.local" >> /etc/hosts
+	echo "127.0.0.1		endpoint.scoop.local" >> /etc/hosts
 
 ############
 # Run Jobs #
