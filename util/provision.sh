@@ -13,8 +13,8 @@ yum remove -y vim-minimal # Removed sudo :(
 yum install -y sudo zsh vim-enhanced docker-io tmux cmake java-1.8.0-openjdk mongodb git
 
 # Leiningen
-curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/bin/lein
-chmod +x /usr/bin/lein
+#curl https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein > /usr/bin/lein
+#chmod +x /usr/bin/lein
 
 # Daemons
 systemctl enable docker
@@ -31,8 +31,8 @@ EOF
 # Get the Repos
 su vagrant << EOF
   git clone https://github.com/Hoverbear/scoop-env scoop-env
-  git clone https://github.com/PhysiciansDataCollaborative/visualizer visualizer
-  git clone https://github.com/PhysiciansDataCollaborative/hub-api hub-api
+  #git clone https://github.com/PhysiciansDataCollaborative/visualizer visualizer
+  #git clone https://github.com/PhysiciansDataCollaborative/hub-api hub-api
 EOF
 #these are the deprecated closer provider and visualizer
 #git clone https://github.com/Hoverbear/scoop-provider-clj.git scoop-env/provider
