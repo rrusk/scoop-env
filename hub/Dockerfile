@@ -16,10 +16,10 @@ ENV HOME /home/app/
 
 ### Install endpoint software.
 WORKDIR /home/app
-RUN git clone git://github.com/scoophealth/query-composer.git
-WORKDIR /home/app/query-composer
+RUN git clone git://github.com/scoophealth/hub.git
+WORKDIR /home/app/hub
 RUN bundle install --path vendor/bundle && \
-    mkdir -p /home/app/query-composer/tmp/pids && \
+    mkdir -p /home/app/hub/tmp/pids && \
     sed -i -e "s/localhost:27017/database:27017/" config/mongoid.yml
 
 ### Change back to root
@@ -57,6 +57,6 @@ CMD ["/sbin/my_init"]
 # In the namespace:
 # -----------------
 # su app
-# cd /home/app/query-composer/
+# cd /home/app/hub/
 # bundle exec rake hquery:users:grant_admin USER_ID=$USER
 ###
