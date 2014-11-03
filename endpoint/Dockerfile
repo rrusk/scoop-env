@@ -11,17 +11,17 @@ ENV HOME /home/app/
 
 ### Install endpoint software.
 WORKDIR /home/app
-RUN git clone git://github.com/scoophealth/query-gateway.git
-WORKDIR /home/app/query-gateway
+RUN git clone git://github.com/scoophealth/endpoint.git
+WORKDIR /home/app/endpoint
 RUN bundle install --path vendor/bundle && \
-    mkdir -p /home/app/query-gateway/tmp/pids && \
+    mkdir -p /home/app/endpoint/tmp/pids && \
     sed -i -e "s/localhost:27017/database:27017/" config/mongoid.yml
 
 ### Change back to root
 USER root
 
-ADD scripts/gateway.sh /etc/service/gateway/run
-RUN chmod +x /etc/service/gateway/run
+ADD scripts/endpoint.sh /etc/service/endpoint/run
+RUN chmod +x /etc/service/endpoint/run
 
 ADD scripts/keys.sh /etc/service/keys/run
 RUN chmod +x /etc/service/keys/run
