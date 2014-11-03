@@ -16,7 +16,7 @@ ENV HOME /home/app/
 
 ### Install endpoint software.
 WORKDIR /home/app
-RUN git clone git://github.com/scoophealth/hub.git
+RUN git clone https://github.com/PhysiciansDataCollaborative/hub
 WORKDIR /home/app/hub
 RUN bundle install --path vendor/bundle && \
     mkdir -p /home/app/hub/tmp/pids && \
