@@ -20,11 +20,12 @@ systemctl start docker
 gpasswd -a vagrant docker
 
 su vagrant << EOF
-  # set up dotfiles
-  git clone https://github.com/PhysiciansDataCollaborative/dotfiles
-  
   # get the environtment repo
   git clone https://github.com/PhysiciansDataCollaborative/scoop-env scoop-env
+  git clone https://github.com/PhysiciansDataCollaborative/visualizer visualizer
+  git clone https://github.com/PhysiciansDataCollaborative/hubapi hubapi
+  git clone https://github.com/PhysiciansDataCollaborative/endpoint endpoint
+  git clone https://github.com/PhysiciansDataCollaborative/hub hub
 EOF
 
 echo ''
