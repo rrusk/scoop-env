@@ -14,7 +14,7 @@ RUN adduser --disabled-password autossh || true
 USER app
 ENV HOME /home/app/
 
-### Install endpoint software.
+### Install Hub Software.
 WORKDIR /home/app
 RUN git clone https://github.com/PhysiciansDataCollaborative/hub
 WORKDIR /home/app/hub

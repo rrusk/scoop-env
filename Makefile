@@ -76,8 +76,8 @@ remove-provider:
 ##############
 # Build Jobs #
 ##############
-build-provider:
-	cd provider && docker build -t scoop/provider .
+build-hubapi:
+	cd hubapi && docker build -t hubapi .
 
 build-visualizer:
 	cd visualizer && docker build -t scoop/visualizer .
