@@ -40,7 +40,7 @@ run-visualizer:
 run-hub:
 	docker run -d -t -i --name hub-db -p 27019:27017 mongo
 	docker run -d -t -i --name hub -p 8083:3002 --link hub-db:database scoop/hub
-
+	docker run --rm -ti --link hub-db:hub-db -v $(pwd)/hub/db:/backup mongo mongorestore -p 27019 -h hub-db /backup
 run-endpoint:
 	docker run -d -t -i --name endpoint-db -p 27020:27017 mongo
 	docker run -d -t -i --name endpoint -p 8084:3001 --link hub:hub --link endpoint-db:database scoop/endpoint
