@@ -3,16 +3,16 @@
 ################
 all: build run
 	
-pull: pull-mongo pull-wildfly pull-keycloak pull-phusion
+pull: pull-mongo pull-phusion
 
-build: build-visualizer build-provider build-hub build-endpoint
+build: build-visualizer build-hubapi build-hub build-endpoint
 
-run: run-hub run-endpoint run-provider run-visualizer 
+run: run-hub run-endpoint run-hubapi run-visualizer 
 
-remove: remove-endpoint remove-hub remove-visualizer remove-provider
+remove: remove-endpoint remove-hub remove-visualizer remove-hubapi
 
 clean:
-	docker rmi scoop/hub scoop/endpoint scoop/visualizer scoop/provider
+	docker rmi scoop/hub scoop/endpoint scoop/visualizer scoop/hubapi
 
 database-populate:
 	# mongorestore --port 27018 data/visualizer-dump/
@@ -20,7 +20,7 @@ database-populate:
 
 hosts:
 	# You *must* sudo this.
-	echo "127.0.0.1		provider.scoop.local" >> /etc/hosts
+	echo "127.0.0.1		hubapi.scoop.local" >> /etc/hosts
 	echo "127.0.0.1		visualizer.scoop.local " >> /etc/hosts
 	echo "127.0.0.1		hub.scoop.local" >> /etc/hosts
 	echo "127.0.0.1		endpoint.scoop.local" >> /etc/hosts
@@ -28,14 +28,14 @@ hosts:
 ############
 # Run Jobs #
 ############
-run-provider:
-	#docker run -d -t -i --name provider-db -p 27017:27017 mongo
-	#sleep 2 && mongorestore data/provider-dump/
-	docker run -d -t -i --name provider -h provider.scoop.local -p 0.0.0.0:8081:8080 -p 127.0.0.1:8889:8888 --link hub-db:database scoop/provider
+run-hubapi:
+	#docker run -d -t -i --name hubapi-db -p 27017:27017 mongo
+	#sleep 2 && mongorestore data/hubapi-dump/
+	docker run -d -t -i --name hubapi -h hubapi.scoop.local -p 0.0.0.0:8081:8080 -p 127.0.0.1:8889:8888 --link hub-db:database hubapi
 
 run-visualizer:
 	docker run -d -t -i --name visualizer-db -p 27018:27017 mongo
-	docker run -d -t -i --name visualizer -h visualizer.scoop.local -p 0.0.0.0:8082:8080 -p 127.0.0.1:8888:8888 --link provider:provider.scoop.local --link visualizer-db:database scoop/visualizer
+	docker run -d -t -i --name visualizer -h visualizer.scoop.local -p 0.0.0.0:8082:8080 -p 127.0.0.1:8888:8888 --link hubapi:hubapi.scoop.local --link visualizer-db:database scoop/visualizer
 
 run-hub:
 	docker run -d -t -i --name hub-db -p 27019:27017 mongo
@@ -67,11 +67,11 @@ remove-visualizer:
 	docker stop visualizer || true
 	docker rm visualizer || true
 
-remove-provider:
-	docker stop provider-db || true
-	docker rm provider-db || true
-	docker stop provider || true
-	docker rm provider || true
+remove-hubapi:
+	docker stop hubapi-db || true
+	docker rm hubapi-db || true
+	docker stop hubapi || true
+	docker rm hubapi || true
 
 ##############
 # Build Jobs #
