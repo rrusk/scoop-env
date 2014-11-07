@@ -31,7 +31,7 @@ hosts:
 run-hubapi:
 	#docker run -d -t -i --name hubapi-db -p 27017:27017 mongo
 	#sleep 2 && mongorestore data/hubapi-dump/
-	docker run -d -t -i --name hubapi -h hubapi.scoop.local -p 0.0.0.0:8081:8080 -p 127.0.0.1:8889:8888 --link hub-db:database hubapi
+	docker run -d -t -i --name hubapi -p 8081:8080 --link hub-db:database hubapi
 
 run-visualizer:
 	docker run -d -t -i --name visualizer-db -p 27018:27017 mongo

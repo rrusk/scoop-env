@@ -2,8 +2,12 @@
 FROM phusion/passenger-ruby19
 
 ### Stuff we need
-RUN apt-get update && \
-    apt-get --yes install ntp libxslt-dev libxml2-dev autossh
+RUN apt-get update
+RUN apt-get --yes install nodejs 
+RUN apt-get --yes install mongodb  
+#install nodejs should also install npm
+ 
+#---http://serverfault.com/questions/529385/the-following-packages-have-unmet-dependencies-nodejs-conflicts-npm
 
 ### ENV and User
 USER app
