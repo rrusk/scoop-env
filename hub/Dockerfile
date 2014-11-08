@@ -16,7 +16,7 @@ ENV HOME /home/app/
 
 ### Install Hub Software.
 WORKDIR /home/app
-RUN git clone https://github.com/PhysiciansDataCollaborative/hub
+RUN git clone https://github.com/scoophealth/query-composer hub
 WORKDIR /home/app/hub
 RUN bundle install --path vendor/bundle && \
     mkdir -p /home/app/hub/tmp/pids && \
