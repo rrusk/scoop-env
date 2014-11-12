@@ -31,7 +31,7 @@ hosts:
 run-hubapi:
 	#docker run -d -t -i --name hubapi-db -p 27017:27017 mongo
 	#sleep 2 && mongorestore data/hubapi-dump/
-	docker run -d -t -i --name hubapi -p 8081:8080 --link hub-db:database hubapi
+	docker run -d -t -i --name hubapi -p 8081:8080 --link hub-db:hub-db hubapi
 
 run-visualizer:
 	docker run -d -t -i --name visualizer-db -p 27018:27017 mongo
@@ -41,8 +41,13 @@ run-hub:
 	docker run -d -t -i --name hub-db -p 27019:27017 mongo
 	docker run -d -t -i --name hub -p 8083:3002 --link hub-db:database scoop/hub
 	sleep 20
-	mongorestore -v --port 27019 hub/db
-	#docker run --rm -ti --link hub:hub -v $(pwd)/hub/db:/backup mongo mongorestore -p 27019 -h hub-db /backup
+	mongorestore -v --port 27019 hub/db #restore the first user - requires that mongo is installed on the host
+	#docker run --rm -ti --link hub-db:hub-db -v $(`pwd`)/scoop-hub/db:/backup mongo mongorestore -v --port 27017 --host hub-db /backup
+	#WARNING - the pwd portion of this command is not working
+	#27017 because this is inter container communication
+	#rm remove the container after the process completes
+	#hub-db:hub-db hub-db container with alias hub-db .... hub-db at th end is a reference to the alias
+	#note --port not -p ... -p is for password
 run-endpoint:
 	docker run -d -t -i --name endpoint-db -p 27020:27017 mongo
 	docker run -d -t -i --name endpoint -p 8084:3001 --link hub:hub --link endpoint-db:database scoop/endpoint
@@ -70,8 +75,6 @@ remove-visualizer:
 	docker rm visualizer || true
 
 remove-hubapi:
-	docker stop hubapi-db || true
-	docker rm hubapi-db || true
 	docker stop hubapi || true
 	docker rm hubapi || true
 
@@ -79,10 +82,10 @@ remove-hubapi:
 # Build Jobs #
 ##############
 build-hubapi:
-	cd hubapi && docker build -t hubapi .
+	docker build -t hubapi hubapi/	
 
 build-visualizer:
-	cd visualizer && docker build -t scoop/visualizer .
+	docker build -t visualizer visualizer/
 
 build-hub:
 	docker build -t scoop/hub hub/

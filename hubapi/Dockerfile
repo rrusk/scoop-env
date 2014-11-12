@@ -1,51 +1,26 @@
-### A Dockerfile!
-FROM phusion/passenger-ruby19
+FROM node
 
-### Stuff we need
-RUN apt-get update
-RUN apt-get --yes install nodejs 
-RUN apt-get --yes install mongodb  
-#install nodejs should also install npm
- 
-#---http://serverfault.com/questions/529385/the-following-packages-have-unmet-dependencies-nodejs-conflicts-npm
+### Configuration Parameters -- You should set these. ###
+# Configure Port
+ENV PORT 8080
+# Configure Secret
+ENV SECRET "Test Secret"
+# Configure MONGO_URI
+# mongodb://<domain>/<database>
+ENV MONGO_URI mongodb://hub-db/query_composer_development
+# Allow Self Signed SSL Certs
+ENV NODE_TLS_REJECT_UNAUTHORIZED 0
 
-### ENV and User
-USER app
-ENV HOME /home/app/
-
-### Install endpoint software.
-WORKDIR /home/app
+ADD . /app
+WORKDIR /app
 RUN git clone https://github.com/PhysiciansDataCollaborative/hubapi
-WORKDIR /home/app/hubapi
+WORKDIR /app/hubapi
 
-### Change back to root
-USER root
+# Remove any binaries that might have invalid ELF headers
+RUN rm -rf node-modules
+RUN npm install
 
-ADD scripts/hubapi.sh /etc/service/hubapi/run
-RUN chmod +x /etc/service/hubapi/run
+EXPOSE 8080
 
-### Expose Ports
-EXPOSE 3003 22
-
-### Run Command
-CMD ["/sbin/my_init"]
-
-
-###
-# Using SELinux?
-# --------------
-# chcon -Rt svirt_sandbox_file_t $(pwd)/db
-###
-# Starting
-# --------
-# NAME="endpoint-1"
-# docker run --name=$NAME -d -p 3001:3001 -p 22:22 -p 27017 --link hub-1:hub endpoint
-#
-### Backing up the DB
-# -------------------
-# PORT=$(docker port $NAME 27017 | awk '{split($0,a,":"); print a[2]}')
-# docker run --rm --link $NAME\:target -v $(pwd)/db:/restore mongo mongorestore -p $PORT -h target /restore
-###
-# Namespace entering
-# ------------------
-# sudo nsenter --target $(docker inspect --format {{.State.Pid}} $NAME) --mount --uts --ipc --net --pid /bin/bash
+# Install Dependencies then start
+CMD npm start
