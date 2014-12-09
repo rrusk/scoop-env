@@ -69,21 +69,33 @@ On the machine you wish to use to access the aliased address the Hosts file must
 127.0.0.1         hub.scoop.local
 127.0.0.1         endpoint.scoop.local
 
-## Populating the databases
 
-Since there is not a publicly available test database for the Hub component, please place your own as `data/hub-dump`. Then,
+## Importing Data
 
-```bash
-make database-populate
-```
+Add someData.zip to scoop-env/endpoint/scripts/.
 
-```
-This is necessary if you have no end points to pull from.  Alternatively, you can proceed 
-with user creation (step 8 in the query-composer instructions), and arrange a data pull 
-from an endpoint of your choice.  When running the command to enable the new user, you 
-must run the command from inside the hub docker container and within the 
-/home/app/query-composer/ directory there.
-```
+Access Vagrant
+`vagrant ssh`
+
+List Containers, copying the ID for the endpoint (scoop/endpoint:latest)
+`docker ps -a`
+
+Kill the endpoint
+`docker kill CONTAINER_ID`
+
+Edit the endpoint's Dockerfile in scoop-env/endpoint/
+Add a line like below.  Anywhere above CMD ["/sbin/my_init"] is fine.
+`ADD scripts/* /home/app/endpoint/scripts/`
+
+
+Rebuild the endpoint, which includes a copy of the new .ZIP file.  Run from scoop-env.
+Use the makefile in scoop-env/
+`Make build-endpoint`
+OR the command it calls:
+`docker build -t scoop/endpoint endpoint/`
+
+Tip: Read scoop-env/Makefile to see how it runs commands
+
 
 ## Playing
 
