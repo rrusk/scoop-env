@@ -28,17 +28,11 @@ Check out `util/provision.sh` to see what's being done to the box while you wait
 * Setup some sane dotfiles.
 * Clone relevant SCOOP repos.
 
-## Making it Personal(ish)
-
-First, you probably want to get some decent configuration:
+## Login to Vagrant With SSH
 
 ```bash
-cd dotfiles
-make
-chsh -s /usr/bin/zsh
+vagrant ssh
 ```
-
-During the `make` step there should be an error from `vim` about color schemes, it's okay, just hit return.
 
 ## Pulling the Images
 
@@ -47,7 +41,75 @@ cd scoop-env
 make pull
 ```
 
-Due to some *unreliabilities* with Docker and Virtualbox interactions (We haven't quite figured it out yet), `docker pull` commands will often fail with cryptic errors. 
+Due to some *unreliabilities* with Docker and Virtualbox interactions (We haven't quite figured it out yet), `docker pull` commands will often fail with cryptic errors. Please see troubleshooting at the bottom of this document.
+
+
+## Building the Images
+
+To build the required images for each component of the system you can just run:
+
+```bash
+make build
+```
+
+You may be interested in looking at the `Makefile` at the `build-*` tasks, especially if you are hacking on a particular component.  Note that the network connectivity is established through the use of port forwarding from the host to the vagrant box.
+
+## Running the Images
+
+```bash
+make run
+```
+
+## Configuring the Hosts File
+
+On the machine you wish to use to access the aliased address the Hosts file must have the entries below added.  On a Mac or Linux based system it can be added with our Make file as `make hosts`.
+
+127.0.0.1         hubapi.scoop.local
+127.0.0.1         visualizer.scoop.local
+127.0.0.1         hub.scoop.local
+127.0.0.1         endpoint.scoop.local
+
+
+## Importing Data
+
+Add someData.zip to scoop-env/endpoint/scripts/.
+
+Access Vagrant
+`vagrant ssh`
+
+List Containers, copying the ID for the endpoint (scoop/endpoint:latest)
+`docker ps -a`
+
+Kill the endpoint
+`docker kill CONTAINER_ID`
+
+Edit the endpoint's Dockerfile in scoop-env/endpoint/
+Add a line like below.  Anywhere above CMD ["/sbin/my_init"] is fine.
+`ADD scripts/* /home/app/endpoint/scripts/`
+
+
+Rebuild the endpoint, which includes a copy of the new .ZIP file.  Run from scoop-env.
+Use the makefile in scoop-env/
+`Make build-endpoint`
+OR the command it calls:
+`docker build -t scoop/endpoint endpoint/`
+
+Tip: Read scoop-env/Makefile to see how it runs commands
+
+
+## Playing
+
+Visit one of the components in your web browser:
+
+* Auth: [https://auth.scoop.local:8080]()
+* Provider: [https://provider.scoop.local:8081/api]()
+* Visualizer: [https://visualizer.scoop.local:8082]()
+* Hub: [https://hub.scoop.local:8083]()
+* Endpoint: [https://endpoint.scoop.local:8084]()
+
+## Troubleshooting
+
+### Pulling the Images
 
 #### Unexpected EOF
 
@@ -88,47 +150,3 @@ sudo rm -rf /var/lib/docker/devicemapper/mnt/05aea00a321b91d34b2c81a2c4b524fd2ed
 ```
 
 If you have errors removing this folder, particularly an input/output error, try restarting the virtual machine.
-
-## Building the Images
-
-To build the required images for each component of the system you can just run:
-
-```bash
-make build
-```
-
-You may be interested in looking at the `Makefile` at the `build-*` tasks, especially if you are hacking on a particular component.  Note that the network connectivity is established through the use of port forwarding from the host to the vagrant box.
-
-## Running the Images
-
-```bash
-make run
-```
-
-> If this is your first time running, check out the `hosts` job in the `Makefile`, you may want to run `make hosts`
-
-## Populating the databases
-
-Since there is not a publicly available test database for the Hub component, please place your own as `data/hub-dump`. Then,
-
-```bash
-make database-populate
-```
-
-```
-This is necessary if you have no end points to pull from.  Alternatively, you can proceed 
-with user creation (step 8 in the query-composer instructions), and arrange a data pull 
-from an endpoint of your choice.  When running the command to enable the new user, you 
-must run the command from inside the hub docker container and within the 
-/home/app/query-composer/ directory there.
-```
-
-## Playing
-
-Visit one of the components in your web browser:
-
-* Auth: [https://auth.scoop.local:8080]()
-* Provider: [https://provider.scoop.local:8081/api]()
-* Visualizer: [https://visualizer.scoop.local:8082]()
-* Hub: [https://hub.scoop.local:8083]()
-* Endpoint: [https://endpoint.scoop.local:8084]()
