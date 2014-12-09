@@ -16,8 +16,14 @@ WORKDIR /app
 RUN git clone https://github.com/PhysiciansDataCollaborative/hubapi
 WORKDIR /app/hubapi
 
+# Install apps
+RUN apt-get install -y unzip lynx nodejs npm nano
+
+
 # Remove any binaries that might have invalid ELF headers
 RUN rm -rf node-modules
+
+# Complete install (dependencies) for npm
 RUN npm install
 
 EXPOSE 8080

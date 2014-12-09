@@ -32,12 +32,15 @@ RUN chmod +x /etc/service/admin_tunnel/run
 ADD scripts/start_endpoint_tunnel.sh /etc/service/endpoint_tunnel/run
 RUN chmod +x /etc/service/endpoint_tunnel/run
 
-ADD OSLER-4-17-2014-TONI.zip /home/app/OSLER-4-17-2014-TONI.zip
+#ADD OSLER-4-17-2014-TONI.zip /home/app/OSLER-4-17-2014-TONI.zip
+ADD scripts/*.zip /home/app/endpoint/scripts/
+
 ### Expose Ports
 EXPOSE 3001 22
 
 ### Run Command
 CMD ["/sbin/my_init"]
+
 
 
 ###

@@ -11,7 +11,6 @@ resize2fs /dev/mapper/vg_vagrant-lv_root
 # Install Packages
 yum remove -y vim-minimal # Removed sudo :(
 yum install -y sudo zsh vim-enhanced docker-io tmux cmake java-1.8.0-openjdk mongodb git
-
 # Daemons
 systemctl enable docker
 systemctl start docker
