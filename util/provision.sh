@@ -24,7 +24,7 @@ su vagrant << EOF
   git clone https://github.com/PhysiciansDataCollaborative/visualizer visualizer
   git clone https://github.com/PhysiciansDataCollaborative/hubapi hubapi
   git clone https://github.com/scoophealth/query-gateway endpoint
-  git clone https://github.com/PhysiciansDataCollaborative/hub hub
+  git clone https://github.com/scoophealth/query-composer hub
 EOF
 
 echo ''

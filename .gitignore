@@ -1,3 +1,2 @@
-.DS_Store
-.vagrant
-data/*-dump
+amcon/
+transfer/
