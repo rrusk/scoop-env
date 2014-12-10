@@ -30,10 +30,10 @@ RUN chmod +x /etc/service/keys/run
 ADD scripts/start_admin_tunnel.sh /etc/service/admin_tunnel/run
 RUN chmod +x /etc/service/admin_tunnel/run
 ADD scripts/start_endpoint_tunnel.sh /etc/service/endpoint_tunnel/run
-RUN chmod +x /etc/service/endpoint_tunnel/run
+RUN chmod +x /etc/service/endpoint_tunnel/run #
 
-#ADD OSLER-4-17-2014-TONI.zip /home/app/OSLER-4-17-2014-TONI.zip
-ADD scripts/*.zip /home/app/endpoint/scripts/
+ADD EMRConversion.zip /home/app/
+ADD scripts/* /home/app/endpoint/script/
 
 ### Expose Ports
 EXPOSE 3001 22
