@@ -20,9 +20,9 @@ gpasswd -a vagrant docker
 
 su vagrant << EOF
   # get the environtment repo
-  git clone https://github.com/PhysiciansDataCollaborative/scoop-env scoop-env
-  git clone https://github.com/PhysiciansDataCollaborative/visualizer visualizer
-  git clone https://github.com/PhysiciansDataCollaborative/hubapi hubapi
+  git clone https://github.com/PhyDac/scoop-env scoop-env
+  git clone https://github.com/PhyDaC/visualizer visualizer
+  git clone https://github.com/PhyDaC/hubapi hubapi
   git clone https://github.com/scoophealth/query-gateway endpoint
   git clone https://github.com/scoophealth/query-composer hub
 EOF
