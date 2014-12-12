@@ -1,5 +1,6 @@
 This repo includes a `Vagrantfile` that will boot up a Fedora 20 based host box. The disk has been extended and it will automatically pull down various repos related to the SCOOP project.
 
+
 ## You'll need:
 
 * [Vagrant](http://www.vagrantup.com/)
@@ -9,12 +10,13 @@ This repo includes a `Vagrantfile` that will boot up a Fedora 20 based host box.
 
 Currently, there is no publicly available data for the `data/` folder, we're working on this. For now, please place a hub dump into the `data/hub-dump` folder.
 
+
 ## Getting Started
 
-First, erect the Vagrant box. We supply a `Vagrantfile` in this repo:
+First, erect the Vagrant box. A `Vagrantfile` is supplied in this repo:
 
 ```bash
-git clone https://github.com/Hoverbear/scoop-env
+git clone https://github.com/PhyDaC/scoop-env
 cd scoop-env
 vagrant up
 ```
@@ -26,13 +28,16 @@ Check out `util/provision.sh` to see what's being done to the box while you wait
 * Create a second drive and join the two into a volume group, then expand the logical volume and resize the filesystem.
 * Install some useful/necessary tools.
 * Setup some sane dotfiles.
-* Clone relevant SCOOP repos.
+* Clone relevant repos.
 
-## Login to Vagrant With SSH
+
+## Login to Vagrant With SSH and Access the Shared Folder
 
 ```bash
 vagrant ssh
+cd /vagrant/
 ```
+
 
 ## Pulling the Images
 
