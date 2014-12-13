@@ -11,7 +11,7 @@ ENV HOME /home/app/
 
 ### Install endpoint software.
 WORKDIR /home/app
-RUN git clone https://github.com/PhysiciansDataCollaborative/visualizer
+RUN git clone https://github.com/PhyDaC/visualizer
 WORKDIR /home/app/visualizer
 
 ### Change back to root

@@ -13,7 +13,7 @@ ENV NODE_TLS_REJECT_UNAUTHORIZED 0
 
 ADD . /app
 WORKDIR /app
-RUN git clone https://github.com/PhysiciansDataCollaborative/hubapi
+RUN git clone https://github.com/PhyDaC/hubapi
 WORKDIR /app/hubapi
 
 # Install apps
