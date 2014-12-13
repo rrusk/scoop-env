@@ -16,7 +16,7 @@ cp builds/* ~/vagrant/
 
 # Echo log and monit status, coloured red
 #
-echo -e "\e[0;31m"
+echo ""
 echo "Your Vagrant build environment is ready in ~/vagrant/"
 echo "Enjoy!"
-echo -e "\e[0m"
+echo ""
