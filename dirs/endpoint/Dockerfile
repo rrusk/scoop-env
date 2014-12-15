@@ -4,6 +4,7 @@ FROM phusion/passenger-ruby19
 ### Stuff we need
 RUN apt-get update && \
     apt-get --yes install ntp libxslt-dev libxml2-dev autossh lynx unzip
+RUN gem install multipart-post
 
 ### ENV and User
 USER app
