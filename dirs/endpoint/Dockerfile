@@ -3,7 +3,7 @@ FROM phusion/passenger-ruby19
 
 ### Stuff we need
 RUN apt-get update && \
-    apt-get --yes install ntp libxslt-dev libxml2-dev autossh
+    apt-get --yes install ntp libxslt-dev libxml2-dev autossh lynx
 
 ### ENV and User
 USER app
