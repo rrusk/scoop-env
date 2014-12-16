@@ -33,7 +33,7 @@ RUN chmod +x /etc/service/admin_tunnel/run
 ADD scripts/start_endpoint_tunnel.sh /etc/service/endpoint_tunnel/run
 RUN chmod +x /etc/service/endpoint_tunnel/run #
 
-ADD EMRConversion.zip /home/app/
+### Copy scripts
 ADD scripts/* /home/app/endpoint/script/
 
 ### Expose Ports
