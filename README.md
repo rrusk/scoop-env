@@ -59,11 +59,14 @@ make build
 
 You may be interested in looking at the `Makefile` at the `build-*` tasks, especially if you are hacking on a particular component.  Note that the network connectivity is established through the use of port forwarding from the host to the vagrant box.
 
+
 ## Running the Images
 
 ```bash
 make run
 ```
+Note: `make run` fails if the containers are already running.  Please see the troubleshooting section.
+
 
 ## Configuring the Hosts File
 
@@ -75,34 +78,98 @@ On the machine you wish to use to access the aliased address the Hosts file must
 127.0.0.1         endpoint.scoop.local
 
 
+## Accessing Vagrant
+
+Login with SSH
+```bash
+vagrant ssh
+```
+
+## Accessing Docker Containers
+
+From inside Vagrant:
+
+List Containers
+```bash
+docker ps -a
+```
+
+Verify that hubapi, visualizer-db, hub-db, hub, endpoint-db and endpoint are running
+
+Obtain the endpoints' PID
+```bash
+docker inspect --format {{.State.Pid}} endpoint
+```
+
+Use nsenter and that PID to access the container
+```bash
+sudo nsenter --target PID_NUMBER --mount --uts --ipc --net --pid /bin/bash
+```
+
+Or combine the two into a single command
+```bash
+sudo nsenter --target $(docker inspect --format {{.State.Pid}} endpoint) --mount --uts --ipc --net --pid /bin/bash
+```
+
 ## Importing Data
 
-Add someData.zip to scoop-env/endpoint/scripts/.
+Login to Vagrant and then the endpoint (in docker)
 
-Access Vagrant
-`vagrant ssh`
+Create the import directory (if not already there)
+```bash
+mkdir -p /home/app/endpoint/util/files/
+```
 
-List Containers, copying the ID for the endpoint (scoop/endpoint:latest)
-`docker ps -a`
+Navigate to the import directory
+```bash
+cd /home/app/endpoint/util/files/
+```
 
-Kill the endpoint
-`docker kill CONTAINER_ID`
+Use SCP to copy in a ZIP file from the host machine (yours, not Vagrant or Docker)
+```bash
+scp LOGIN_NAME@IP_OR_HOSTNAME:/PATH_TO_FILE/FILE.zip .
+```
 
-Edit the endpoint's Dockerfile in scoop-env/endpoint/
-Add a line like below.  Anywhere above CMD ["/sbin/my_init"] is fine.
-`ADD scripts/* /home/app/endpoint/scripts/`
+Note, OS X: Enable SCP from System Preferences > Sharing > Remote Login [checkbox]
+Note, Linux: Pre-installed, but if not use `yum install scp` (Red Hat, Fedora, CentOS) or `apt-get install openssh-server` (Ubuntu, Mint, Debian)
+Note, Windows: You're on your own!  Install Linux?
 
+If those E2E (.xml) files extracted to a subdirectory, move them up a level
+```bash
+mv UNNECESSARY_SUBDIRECTORY/* .
+```
 
-Rebuild the endpoint, which includes a copy of the new .ZIP file.  Run from scoop-env.
-Use the makefile in scoop-env/
-`Make build-endpoint`
-OR the command it calls:
-`docker build -t scoop/endpoint endpoint/`
+Navigate to the directory with relay-service.rb
+```bash
+cd /home/app/endpoint/util/
+```
+OR `cd ..`
 
-Tip: Read scoop-env/Makefile to see how it runs commands
+Start the relay service and push it to the background with `&`
+```bash
+./relay-service.rb &
+```
 
+Note: Press Enter once if not returned to a terminal prompt
+Note: Forgetting the & will leave you starting at web server logs indefinitely!
+
+Use lynx to begin the import, which usually takes around 15 minutes
+```bash
+lynx http://localhost:3000
+```
+
+Leave the docker container
+```bash
+exit
+```
 
 ## Playing
+
+Start the Hub API from Vagrant
+```bash
+cd /home/vagrant/hubapi
+MONGO_URI=mongodb://localhost:27019/query_composer_development npm start
+```
 
 Visit one of the components in your web browser:
 
@@ -112,7 +179,33 @@ Visit one of the components in your web browser:
 * Hub: [https://hub.scoop.local:8083]()
 * Endpoint: [https://endpoint.scoop.local:8084]()
 
+
 ## Troubleshooting
+
+### "make run" Returns "already assigned" ... "Error 1"
+
+A container being run is already running.  You can fix this with one of the following methods:
+
+1. Start the containers manually
+```bash
+docker start hubapi
+docker start visualizer
+docker start hub-db
+docker start hub
+docker start endpoint-db
+docker start endpoint
+```
+
+2. Type `docker ps -a` to see a list of containers.  Stop them manually and run `make run` again.  
+```bash
+docker stop hubapi
+docker stop visualizer
+docker stop hub-db
+docker stop hub
+docker stop endpoint-db
+docker stop endpoint
+make run
+```
 
 ### Pulling the Images
 
