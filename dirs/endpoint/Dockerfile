@@ -1,4 +1,4 @@
-### A Dockerfile!
+q### A Dockerfile!
 FROM phusion/passenger-ruby19
 
 ### Stuff we need
@@ -16,6 +16,7 @@ RUN git clone https://github.com/scoophealth/query-gateway endpoint
 WORKDIR /home/app/endpoint
 RUN bundle install --path vendor/bundle && \
     mkdir -p /home/app/endpoint/tmp/pids && \
+    mkdir -p /home/app/endpoint/files && \
     sed -i -e "s/localhost:27017/database:27017/" config/mongoid.yml
 
 ### Change back to root

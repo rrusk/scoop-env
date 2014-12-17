@@ -1,7 +1,9 @@
 ################
 # General Jobs #
 ################
-all: build run
+default: pull build run
+
+all: pull build run
 	
 pull: pull-mongo pull-phusion
 
@@ -18,13 +20,6 @@ database-populate:
 	# mongorestore --port 27018 data/visualizer-dump/
 	mongorestore --drop --port 27019 data/hub-dump/
 
-hosts:
-	# You *must* sudo this.
-	echo "127.0.0.1		hubapi.scoop.local" >> /etc/hosts
-	echo "127.0.0.1		visualizer.scoop.local " >> /etc/hosts
-	echo "127.0.0.1		hub.scoop.local" >> /etc/hosts
-	echo "127.0.0.1		endpoint.scoop.local" >> /etc/hosts
-
 ############
 # Run Jobs #
 ############
@@ -35,7 +30,7 @@ run-hubapi:
 
 run-visualizer:
 	docker run -d -t -i --name visualizer-db -p 27018:27017 mongo
-	docker run -d -t -i --name visualizer -h visualizer.scoop.local -p 0.0.0.0:8082:8080 -p 127.0.0.1:8888:8888 --link hubapi:hubapi.scoop.local --link visualizer-db:database scoop/visualizer
+    #docker run -d -t -i --name visualizer -h visualizer.scoop.local -p 0.0.0.0:8082:8080 -p 127.0.0.1:8888:8888 --link hubapi:hubapi.scoop.local --link visualizer-db:database scoop/visualizer
 
 run-hub:
 	docker run -d -t -i --name hub-db -p 27019:27017 mongo

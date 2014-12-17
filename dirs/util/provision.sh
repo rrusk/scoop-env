@@ -10,7 +10,7 @@ resize2fs /dev/mapper/vg_vagrant-lv_root
 
 # Install Packages
 yum remove -y vim-minimal # Removed sudo :(
-yum install -y sudo zsh vim-enhanced docker-io tmux cmake java-1.8.0-openjdk mongodb git unzip npm nano
+yum install -y sudo zsh vim-enhanced docker-io tmux cmake java-1.8.0-openjdk mongodb git unzip npm nano screen
 
 # Daemons
 systemctl enable docker
@@ -26,6 +26,17 @@ su vagrant << EOF
   git clone https://github.com/PhyDaC/hubapi hubapi
   git clone https://github.com/scoophealth/query-gateway endpoint
   git clone https://github.com/scoophealth/query-composer hub
+
+  # Copy scripts
+  cp /vagrant/util/startups/start-hubapi.sh /vagrant/hubapi/
+  cp /vagrant/util/startups/start-visualizer.sh /vagrant/visualizer/
+  cp /vagrant/util/startups/background-startups.sh /vagrant/
+
+  # Add to hosts file
+  echo '127.0.0.1         hubapi.scoop.local' | sudo tee -a /etc/hosts
+  echo '127.0.0.1         visualizer.scoop.local' | sudo tee -a /etc/hosts
+  echo '127.0.0.1         hub.scoop.local' | sudo tee -a /etc/hosts
+  echo '127.0.0.1         endpoint.scoop.local' | sudo tee -a /etc/hosts
 EOF
 
 echo ''

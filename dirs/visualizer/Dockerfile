@@ -17,6 +17,7 @@ WORKDIR /home/app/visualizer
 ### Change back to root
 USER root
 
+### Add scripts
 ADD scripts/visualizer.sh /etc/service/visualizer/run
 RUN chmod +x /etc/service/visualizer/run
 
