@@ -11,152 +11,143 @@ This repo includes a `Vagrantfile` that will boot up a Fedora 20 based host box.
 Currently, there is no publicly available data for the `data/` folder, we're working on this. For now, please place a hub dump into the `data/hub-dump` folder.
 
 
-## Getting Started
+## Git Clone and Start Vagrant
 
-First, erect the Vagrant box. A `Vagrantfile` is supplied in this repo:
-
+Clone the repository and run start.sh
 ```bash
 git clone https://github.com/PhyDaC/scoop-env
 cd scoop-env
+./start.sh
+```
+
+Navigate to ~/vagrant/ and start Vagrant
+```bash
+cd ~/vagrant/
 vagrant up
 ```
 
-**If you don't already have a Fedora 20 Base Box**: This first run will have a considerable wait as it is downloaded.
+A Fedora image is downloaded on the first run.  Please expect it to take time.
 
-Check out `util/provision.sh` to see what's being done to the box while you wait. In short:
+Read `util/prosition.sh` to see how it:
 
-* Create a second drive and join the two into a volume group, then expand the logical volume and resize the filesystem.
-* Install some useful/necessary tools.
-* Setup some sane dotfiles.
-* Clone relevant repos.
-
-
-## Login to Vagrant With SSH and Access the Shared Folder
-
-```bash
-vagrant ssh
-cd /vagrant/
-```
+* Creates a second drive and join both as a volume group
+* Expands the logical volume and resize the filesystem
+* Installs tools
+* Setsvup some sane dotfiles
+* Clones repositories
 
 
-## Pulling the Images
-
-```bash
-cd scoop-env
-make pull
-```
-
-Due to some *unreliabilities* with Docker and Virtualbox interactions (We haven't quite figured it out yet), `docker pull` commands will often fail with cryptic errors. Please see troubleshooting at the bottom of this document.
-
-
-## Building the Images
-
-To build the required images for each component of the system you can just run:
-
-```bash
-make build
-```
-
-You may be interested in looking at the `Makefile` at the `build-*` tasks, especially if you are hacking on a particular component.  Note that the network connectivity is established through the use of port forwarding from the host to the vagrant box.
-
-
-## Running the Images
-
-```bash
-make run
-```
-Note: `make run` fails if the containers are already running.  Please see the troubleshooting section.
-
-
-## Configuring the Hosts File
-
-On the machine you wish to use to access the aliased address the Hosts file must have the entries below added.  On a Mac or Linux based system it can be added with our Make file as `make hosts`.
-
-127.0.0.1         hubapi.scoop.local
-127.0.0.1         visualizer.scoop.local
-127.0.0.1         hub.scoop.local
-127.0.0.1         endpoint.scoop.local
-
-
-## Accessing Vagrant
+## Access Vagrant
 
 Login with SSH
 ```bash
 vagrant ssh
 ```
 
+To pass vagrant commands, use `vagrant ssh -c COMMAND`
+
+
+## Build the visualizer, hubapi, hub and endpoint
+
+Login to Vagrant, then make those containers
+```bash
+make
+```
+
+That runs the commands below, as seen in the Makefile.  Knowing this structure will aid greatly in troubleshooting.
+
+make:
+* make pull
+ * make pull-mongo
+ * make pull-wildfly
+ * make pull-keycloak
+ * make pull-phusion
+* make build
+ * make build-hubapi
+ * make build-visualizer
+ * make build-hub
+ * make build-endpoint
+* make run
+ * make run-hubapi
+ * make run-visualizer
+ * make run-hub
+ * make run-endpoint
+
+Due to some *unreliabilities* with Docker and Virtualbox interactions (We haven't quite figured it out yet), `docker pull` commands will often fail with cryptic errors. Please see troubleshooting at the bottom of this document.
+
+Note: `make run` fails if the containers are already running.  Please see the troubleshooting section.
+Note: `make` alone will excute the three previous make commands.
+
+
+## Configuring the Hosts File
+
+Vagrant's hosts file is configured by provision.sh, but your host machine will need these entries to communicate with our docker containers.
+```bash
+127.0.0.1         hubapi.scoop.local
+127.0.0.1         visualizer.scoop.local
+127.0.0.1         hub.scoop.local
+127.0.0.1         endpoint.scoop.local
+```
+
 ## Accessing Docker Containers
 
-From inside Vagrant:
-
-List Containers
+List Containers (ssh'd into vagrant)
 ```bash
 docker ps -a
 ```
 
 Verify that hubapi, visualizer-db, hub-db, hub, endpoint-db and endpoint are running
 
-Obtain the endpoints' PID
-```bash
-docker inspect --format {{.State.Pid}} endpoint
-```
-
-Use nsenter and that PID to access the container
-```bash
-sudo nsenter --target PID_NUMBER --mount --uts --ipc --net --pid /bin/bash
-```
-
-Or combine the two into a single command
+Access the endpoint by entering its namespace
 ```bash
 sudo nsenter --target $(docker inspect --format {{.State.Pid}} endpoint) --mount --uts --ipc --net --pid /bin/bash
 ```
 
+Explanation: Finding the endpoint's PID with `docker inspect --format {{.State.Pid}} endpoint`
+Explanation: Enter via namespace `sudo nsenter --target PID_NUMBER --mount --uts --ipc --net --pid /bin/bash `
+
+
 ## Importing Data
 
-Login to Vagrant and then the endpoint (in docker)
+Login to Vagrant and then the endpoint (as above)
 
-Create the import directory (if not already there)
+Navigate to the endpoint's util directory
 ```bash
-mkdir -p /home/app/endpoint/util/files/
+cd /home/app/endpoint/util/
 ```
 
-Navigate to the import directory
+Import Multiple XML Files:
+Use SCP to copy the E2E files (multiple XML) into ./files/
 ```bash
-cd /home/app/endpoint/util/files/
+mkdir -p files/
+scp LOGIN_NAME@IP_OR_HOSTNAME:/PATH_TO_FILES/*.xml ./files/
 ```
 
-Use SCP to copy in a ZIP file from the host machine (yours, not Vagrant or Docker)
+Or Import and Extract a Zip File:
+Use SCP to copying a zip file over, then unzip it and then move the XML files
 ```bash
-scp LOGIN_NAME@IP_OR_HOSTNAME:/PATH_TO_FILE/FILE.zip .
+scp LOGIN_NAME@IP_OR_HOSTNAME:/PATH_TO_ZIP/*.zip ./files/
+unzip ZIPFILE.zip
+mv UNZIPPED_SUBDIRECTORY/* ./files/
 ```
 
 Note, OS X: Enable SCP from System Preferences > Sharing > Remote Login [checkbox]
 Note, Linux: Pre-installed, but if not use `yum install scp` (Red Hat, Fedora, CentOS) or `apt-get install openssh-server` (Ubuntu, Mint, Debian)
 Note, Windows: You're on your own!  Install Linux?
 
-If those E2E (.xml) files extracted to a subdirectory, move them up a level
-```bash
-mv UNNECESSARY_SUBDIRECTORY/* .
-```
-
-Navigate to the directory with relay-service.rb
-```bash
-cd /home/app/endpoint/util/
-```
-OR `cd ..`
-
 Start the relay service and push it to the background with `&`
 ```bash
 ./relay-service.rb &
+[press Enter]
 ```
 
-Note: Press Enter once if not returned to a terminal prompt
-Note: Forgetting the & will leave you starting at web server logs indefinitely!
+Note: Forgetting the `&` will leave you staring indefinitely at web server logs!
 
-Use lynx to begin the import, which usually takes around 15 minutes
+Use lynx to access the page on localhost:3000 and run the import
 ```bash
 lynx http://localhost:3000
 ```
+Select "Create test patient records."  White means highlighted.  The process will complete in around 20 minutes, then press q, y to quit.
 
 Leave the docker container
 ```bash
@@ -165,11 +156,25 @@ exit
 
 ## Playing
 
-Start the Hub API from Vagrant
+Start the HubAPI and Visualizer (ssh'd into Vagrant)
 ```bash
-cd /home/vagrant/hubapi
-MONGO_URI=mongodb://localhost:27019/query_composer_development npm start
+cd /vagrant/
+./background-startups.sh
+exit
 ```
+
+This launches two scripts and sends them to the background with screen.  Please see hubapi/start-hubapi.sh and visualizer/start-visualizer.sh for details.  They output logs to ~/.hubapi.out and ~/.visualizer.out.
+
+
+Check if HubAPI and Visualizer are running with screen (ssh'd into Vagrant)
+```bash
+ps -aux | grep screen | grep -v grep
+```
+
+Explanation: `ps -aux` shows a = all processes, u = users (e.g vagrant) and x = no tty restriction (don't ask)
+Explanation: `| grep screen` shows only processes with the word `screen`
+Explanation: `| grep -v grep` hides processes with the word `grep` in them, since greps is also a process!
+
 
 Visit one of the components in your web browser:
 
@@ -184,7 +189,7 @@ Visit one of the components in your web browser:
 
 ### "make run" Returns "already assigned" ... "Error 1"
 
-A container being run is already running.  You can fix this with one of the following methods:
+The container in question is probably already running.  Try one of the these:
 
 1. Start the containers manually
 ```bash
