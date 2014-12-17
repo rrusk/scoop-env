@@ -168,8 +168,21 @@ exit
 Start the Hub API from Vagrant
 ```bash
 cd /home/vagrant/hubapi
-MONGO_URI=mongodb://localhost:27019/query_composer_development npm start
+npm install
+MONGO_URI=mongodb://localhost:27019/query_composer_development npm start > ~/.hubapi.out
 ```
+
+Start the Hub API from Vagrant
+```bash
+cd /home/vagrant/visualizer
+npm install
+MONGO_URI=mongodb://localhost:27018/visualizer npm start > ~/.visualizer.out
+```
+
+Note: Using `nohup` ... `&` will push the hub's server into the background.  Bring it back with `fg`.
+Note: `> ~/blah.out 2>&1` writes output to `~/blah.out`.
+Note: `npm install` configures npm in a directory with package.json.  It only needs to be run once per folder.
+
 
 Visit one of the components in your web browser:
 
