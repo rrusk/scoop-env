@@ -28,9 +28,9 @@ su vagrant << EOF
   git clone https://github.com/scoophealth/query-composer hub
 
   # Copy scripts
-  cp /vagrant/util/startups/start-hubapi.sh /vagrant/hubapi/
-  cp /vagrant/util/startups/start-visualizer.sh /vagrant/visualizer/
-  cp /vagrant/util/startups/background-startups.sh /vagrant/
+  cp /vagrant/util/startups/start-hubapi.sh /home/vagrant/hubapi/
+  cp /vagrant/util/startups/start-visualizer.sh /home/vagrant/visualizer/
+  cp /vagrant/util/startups/background-startups.sh /home/vagrant/
 
   # Add to hosts file
   echo '127.0.0.1         hubapi.scoop.local' | sudo tee -a /etc/hosts

@@ -26,7 +26,7 @@ database-populate:
 run-hubapi:
 	#docker run -d -t -i --name hubapi-db -p 27017:27017 mongo
 	#sleep 2 && mongorestore data/hubapi-dump/
-	docker run -d -t -i --name hubapi -p 8081:8080 --link hub-db:hub-db hubapi
+    #docker run -d -t -i --name hubapi -p 8081:8080 --link hub-db:hub-db hubapi
 
 run-visualizer:
 	docker run -d -t -i --name visualizer-db -p 27018:27017 mongo
