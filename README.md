@@ -76,12 +76,11 @@ make:
 Due to some *unreliabilities* with Docker and Virtualbox interactions (We haven't quite figured it out yet), `docker pull` commands will often fail with cryptic errors. Please see troubleshooting at the bottom of this document.
 
 Note: `make run` fails if the containers are already running.  Please see the troubleshooting section.
-Note: `make` alone will excute the three previous make commands.
 
 
 ## Configuring the Hosts File
 
-Vagrant's hosts file is configured by provision.sh, but your host machine will need these entries to communicate with our docker containers.
+Vagrant's hosts file is configured by provision.sh, but your host (non-VM) machine will need these entries to communicate with our docker containers.
 ```bash
 127.0.0.1         hubapi.scoop.local
 127.0.0.1         visualizer.scoop.local
@@ -193,8 +192,6 @@ The container in question is probably already running.  Try one of the these:
 
 1. Start the containers manually
 ```bash
-docker start hubapi
-docker start visualizer
 docker start hub-db
 docker start hub
 docker start endpoint-db
@@ -203,8 +200,6 @@ docker start endpoint
 
 2. Type `docker ps -a` to see a list of containers.  Stop them manually and run `make run` again.  
 ```bash
-docker stop hubapi
-docker stop visualizer
 docker stop hub-db
 docker stop hub
 docker stop endpoint-db
