@@ -17,12 +17,6 @@ Clone the repository and run start.sh
 ```bash
 git clone https://github.com/PhyDaC/scoop-env
 cd scoop-env
-./start.sh
-```
-
-Navigate to ~/vagrant/ and start Vagrant
-```bash
-cd ~/vagrant/
 vagrant up
 ```
 
