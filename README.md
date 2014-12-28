@@ -43,8 +43,9 @@ To pass vagrant commands, use `vagrant ssh -c COMMAND`
 
 ## Build the visualizer, hubapi, hub and endpoint
 
-Login to Vagrant, then make those containers
+Login to Vagrant, navigate to its share (/vagrant/) then make those containers
 ```bash
+cd /vagrant/
 make
 ```
 
