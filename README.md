@@ -101,7 +101,7 @@ Explanation: Finding the endpoint's PID with `docker inspect --format {{.State.P
 
 Explanation: Enter via namespace `sudo nsenter --target PID_NUMBER --mount --uts --ipc --net --pid /bin/bash `
 
-### Create a Bash Function
+## Create a Bash Function
 
 Optionally, create a bash function for calling that lengthy nsenter command (above).
 
