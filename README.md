@@ -98,7 +98,27 @@ sudo nsenter --target $(docker inspect --format {{.State.Pid}} endpoint) --mount
 ```
 
 Explanation: Finding the endpoint's PID with `docker inspect --format {{.State.Pid}} endpoint`
+
 Explanation: Enter via namespace `sudo nsenter --target PID_NUMBER --mount --uts --ipc --net --pid /bin/bash `
+
+### Create a Bash Function
+
+Optionally, create a bash function for calling that lengthy nsenter command (above).
+
+Here the command is `dockin [containerToEnter]`.
+
+Edit ~/.bashrc with `nano ~/.bashrc`, adding the code below.  Then log in/out or type `source ~/.bashrc`.
+```bash
+function dockin(){
+  if [ "$1" != '' ]
+  then
+    sudo nsenter --target $(docker inspect --format {{.State.Pid}} $1) --mount --uts --ipc --net --pid /bin/bash
+  else
+    echo "Please pass a docker container to enter"
+    echo "Usage: dockin [containerToEnter]"
+  fi
+}
+```
 
 
 ## Importing Data
