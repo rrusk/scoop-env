@@ -22,7 +22,7 @@ RUN git clone https://github.com/PhyDaC/hubapi
 WORKDIR /app/hubapi
 
 # Install apps
-RUN apt-get install -y unzip lynx nodejs npm nano
+RUN apt-get update && apt-get install -y unzip lynx nodejs npm nano && apt-get clean
 
 # Remove any binaries that might have invalid ELF headers
 RUN rm -rf node-modules

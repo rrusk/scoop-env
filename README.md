@@ -19,10 +19,11 @@ git clone https://github.com/PhyDaC/scoop-env
 cd scoop-env
 vagrant up
 ```
+Note: 64-bit guests in VirtualBox require VT-x support.  Ensure that VT-x support is enabled in the BIOS before installing 64-bit guests.
 
 A Fedora image is downloaded on the first run.  Please expect it to take time.
 
-Read `util/prosition.sh` to see how it:
+Read `util/provision.sh` to see how it:
 
 * Creates a second drive and join both as a volume group
 * Expands the logical volume and resize the filesystem
